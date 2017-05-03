@@ -1,3 +1,31 @@
+
+var webpack = require('webpack');
+
+module.exports = {
+    entry: {
+        'app': './assets/app/main.ts'
+    },
+
+    resolve: {
+        extensions: ['.js', '.ts']
+    },
+
+    module: {
+        rules: [
+            {
+                test: /\.html$/,
+                use: [{ loader: 'html-loader' }]
+            },
+            {
+                test: /\.css$/,
+                use: [{ loader: 'raw-loader' }]
+            }
+        ],
+        exprContextCritical: false
+
+    }
+};
+/*
 var webpack = require('webpack');
 
 module.exports = {
@@ -13,6 +41,21 @@ module.exports = {
     },
 
     module: {
+        rules: [
+            {
+                test: /\.html$/,
+                use: [{ loader: 'html-loader' }]
+            },
+            {
+                test: /\.css$/,
+                use: [{ loader: 'raw-loader' }]
+            }
+        ],
+        exprContextCritical: false
+
+    },
+ / *
+    module: {
         loaders: [
             {
                 test: /\.ts$/,
@@ -23,14 +66,24 @@ module.exports = {
                 ]
             },
             {
-                test: /\html$/,
-                loaders: 'html'
+                test: /\.html$/,
+                use: [{loader: 'html-loader'}]
             },
             {
-                test: /.css/,
-                loader: 'raw'
+                test: /\.css$/,
+                use: [{loader: 'raw-loader'}]
             }
         ]
-    }
+    },
+ * /
+    plugins: [
+        new webpack.ContextReplacementPlugin(
+            // The (\\|\/) piece accounts for path separators in *nix and Windows
+            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+            './src' // location of your src
+        )
+    ]
 
 };
+
+*/

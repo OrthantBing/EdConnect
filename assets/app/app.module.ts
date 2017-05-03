@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -9,8 +9,8 @@ import { CommonModule } from '@angular/common';
         CommonModule,
         BrowserModule
     ],
-    exports: [ AppModule ],
+    exports: [],
     providers: [],
-    bootstrap: [ BrowserModule ]
+    bootstrap: [ AppComponent ]
 })
 export class AppModule {}
