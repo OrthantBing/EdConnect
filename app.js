@@ -15,10 +15,10 @@ var users = require('./routes/users');
 
 const lead = require('./routes/lead');
 const education = require('./routes/education');
+const experience = require('./routes/experience');
+const languagetest = require('./routes/languagetest');
 
 var app = express();
-
-
 
 // Connect to Database
 mongoose.connect(config.database);
@@ -59,6 +59,8 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/lead', lead);
 app.use('/education', education);
+app.use('/experience', experience);
+app.use('/languagetest', languagetest);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

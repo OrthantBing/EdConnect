@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const config = require('../config/database');
 
+const Schema = mongoose.Schema
+
 const ExperienceSchema = mongoose.Schema({
     leadProfile: {
         type: Schema.Types.ObjectId,
@@ -9,7 +11,7 @@ const ExperienceSchema = mongoose.Schema({
     experienceinmonths: {
         type: Number,
     },
-    Employer: {
+    employer: {
         type: String
     },
     jobTitle: {
@@ -33,6 +35,34 @@ const ExperienceSchema = mongoose.Schema({
             message: '{VALUE} is not a valid date'
         }
     }
+},
+{
+    timeestamps: true
 });
 
-const Experience = module.exports.Experience = mongoose.model('Experience', ExperienceSchema);
+const Experience = module.exports = mongoose.model('Experience', ExperienceSchema);
+
+module.exports.addExperience = (experience, lead) => {
+    return new Promise((resolve, reject) => {
+        experience.save((err, data) => {
+            if (err) reject(err);
+
+            lead.experience.push(data);
+            lead.save((err, lead) => {
+                if (err) reject(err);
+                if (lead) {
+                    resolve(data);
+                }
+            })
+        });
+    });
+}
+
+module.exports.getExperience = (id, callback) => {
+    Experience.findById(id, callback);
+};
+
+module.exports.updateExperience = (id, data, callback) => {
+    Experience.findByIdAndUpdate(id, data, {new: true})
+        .exec(callback);
+};
