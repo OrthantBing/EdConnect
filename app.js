@@ -5,10 +5,37 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+const passport = require('passport');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const config = require('./config/database');
+
 var index = require('./routes/index');
 var users = require('./routes/users');
 
+const lead = require('./routes/lead');
+const education = require('./routes/education');
+
 var app = express();
+
+
+
+// Connect to Database
+mongoose.connect(config.database);
+
+mongoose.connection.on('connected', () => {
+  console.log('Connected to database' + config.database);
+});
+
+
+mongoose.connection.on('error', (err) => {
+  console.log('Database error: '  + err);
+});
+
+// Cross site scripting:
+
+app.use(cors());
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,10 +47,18 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./config/passport')(passport);
+// Static path for accessing in production.
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/lead', lead);
+app.use('/education', education);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
