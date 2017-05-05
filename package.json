@@ -28,6 +28,7 @@
     "cors": "*",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "font-awesome": "^4.7.0",
     "hbs": "~4.0.1",
     "jsonwebtoken": "*",
     "mongoose": "*",
@@ -52,6 +53,7 @@
     "raw-loader": "^0.5.1",
     "ts-loader": "^2.0.3",
     "typescript": "^2.1.4",
+    "url-loader": "^0.5.8",
     "webpack": "^2.2.1",
     "webpack-merge": "^4.1.0"
   },

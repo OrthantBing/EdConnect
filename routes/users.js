@@ -13,7 +13,8 @@ router.post('/register', (req, res, next) => {
     name: req.body.name,
     email: req.body.email,
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
+    role: req.body.role
   });
 
   console.log(req.body.email);
@@ -41,43 +42,67 @@ router.post('/authenticate', (req, res, next) => {
   const password = req.body.password;
 
   User.getUserByUsername(username, (err, user) => {
-    if(err) throw err;
+    if(err) {
+      return res.status(500).json({
+        title: 'An error occurred',
+        error: err
+      });
+    }
     if(!user){
-      return res.json({success: false, msg: 'User not found'});
+      return res.status(401).json({
+        title: 'Login failed',
+        error: {
+          message: 'Invalid Login Credentials'
+        }
+      });
     }
 
     User.comparePassword(password, user.password, (err, isMatch) => {
-      if(err) throw err;
+      if(err) {
+        return res.status(500).json({
+          title: 'Login failed',
+          error: {
+            message: 'Invalid Login Credentials'
+          }
+        });
+      }
 
       if(isMatch){
+
+        console.log("I am here");
         const token = jwt.sign(user, config.secret, {
           expiresIn: 604800
+          //expiresIn: 1
         });
 
-        res.json({
+        return res.status(201).json({
           success: true,
           token: 'JWT '+token,
           user: {
             id: user._id,
             name: user.name,
             username: user.username,
-            email: user.email
+            email: user.email,
+            role: user.role
           }
         });
       }
 
       else{
-        return res.json({
-          success: false,
-          msg: 'Wrong Password'
-        })
+        return res.status(401).json({
+          title: 'Login failed',
+          error: {
+            message: 'Invalid Login Credentials',
+          }
+        });
       }
     });
   });
 });
 
-router.get('/profile', passport.authenticate('jwt', {session: false}),(req, res, next) => {
-  res.json({user: req.user});
+router.post('/profile', passport.authenticate('jwt', {session: false}),(req, res, next) => {
+  console.log("user");
+  return res.json({user: req.user});
 })
 
 router.get('/validate', (req, res, next) => {

@@ -1,3 +1,43 @@
 h1 {
     color: red;
 }
+/*Sidebar*/
+.sidebar-dash{
+    width: 75px;
+    height: 525px;
+    position: fixed;
+    padding-right: 0px;
+    padding-left: 0px;
+    text-align: center;
+    z-index: 10;
+}
+.sidebar-dash a{
+    color: #505050;
+}
+.sidebar-dash a:hover{
+    color: black;
+}
+.fa-side {
+    width: 75px;
+    height: 75px;
+    padding-top: 18px;
+    background-color: gainsboro;
+    border-bottom: 1px solid silver;
+}
+.fa-side:hover{
+    background-color: white !important;
+}
+.fa-side-last {
+    width: 75px;
+    height: 75px;
+    padding-top: 18px;
+}
+.fa-side-last:hover {
+    background-color: transparent;
+}
+.sidebar-text{
+    font-size: 0.6em;
+    padding-top: 5px;
+}
+
+

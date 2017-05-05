@@ -3,7 +3,8 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        'app': './assets/app/main.ts'
+        'app': './assets/app/main.ts',
+        'vendor': './assets/vendor/vendor.ts'
     },
 
     resolve: {
@@ -21,13 +22,34 @@ module.exports = {
                 use: [{ loader: 'raw-loader' }]
             },
             {
-                test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/,
+                test: /\.(png|jpe?g|gif|ico)$/,
                 loader: 'file-loader?name=assets/[name].[hash].[ext]'
+            },
+            {
+                test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+            },
+            {
+                test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url-loader?limit=10000&mimetype=application/font-woff'
+            },
+            {
+                test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url-loader?limit=10000&mimetype=application/octet-stream'
+            },
+            {
+                test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'file-loader'
+            },
+            {
+                test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+                loader: 'url-loader?limit=10000&mimetype=image/svg+xml'
             },
         ],
         exprContextCritical: false
 
-    }
+    },
+    
 };
 /*
 var webpack = require('webpack');

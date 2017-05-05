@@ -64,9 +64,16 @@ app.use('/languagetest', languagetest);
 
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    return res.render('index');
-});
+ app.use(function (req, res, next) {
+   //console.log(res.status())
+   return res.status(401).json({
+     title: "Invalid",
+     error: {
+       message: "The request is invalid"
+     }
+   })
+    //return res.render('index');
+ });
 
 
 /*
@@ -88,4 +95,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 */
+
 module.exports = app;
