@@ -37,12 +37,11 @@ const LeadSchema = mongoose.Schema({
     },
     gender: {
         type: String,
-        enum: ['Male', 'Female', 'Others'],
+        enum: ['Male', 'Female', 'Other'],
         required: true
     },
     phone: [{
-        type: Number,
-        required: true
+        type: String,
     }],
     address: {
         type: String,

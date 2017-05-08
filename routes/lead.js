@@ -6,17 +6,37 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/database');
 
 
-
-router.get('/:id', passport.authenticate('jwt', {session: false}), (req, res, next) => {
-    Lead.getLeadById(req.params.id, (err, lead) => {
+router.post('/validateemail', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    Lead.findOne({ email: req.body.email}, (err, leademail) => {
         if (err) {
-            res.status(500).json({
+            return res.status(500).json({
                 title: 'An error occurred',
                 error: err
             });
         }
         else {
-            res.status(200).json({
+            if (leademail) {
+                return res.status(200).json({
+                    asyncInvalid: true
+                });
+            } else {
+                return res.status(200).json({
+                });
+            }
+        }
+    });
+});
+
+router.get('/:id', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+    Lead.getLeadById(req.params.id, (err, lead) => {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error occurred',
+                error: err
+            });
+        }
+        else {
+            return res.status(200).json({
                 message: 'Lead Info',
                 obj: lead
             });
@@ -37,13 +57,13 @@ router.patch('/update/:id', passport.authenticate('jwt', {session: false}), (req
     data.lastmodifiedBy = req.user;
     Lead.UpdateLead(req.params.id, data, (err, lead) => {
         if (err) {
-            res.status(500).json({
+            return res.status(500).json({
                 title: 'An error occurred',
                 error: err
             });
         }
         else {
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'Lead Saved',
                 obj: lead
             }); 
@@ -66,9 +86,10 @@ router.patch('/update/:id', passport.authenticate('jwt', {session: false}), (req
  *  This route will have to serve both.
  * 
  */
-router.post('/add', passport.authenticate('jwt', {session: false}), (req, res, next) => {
+router.post('/add' ,(req, res, next) => {console.log(req.headers); next() }, passport.authenticate('jwt', {session: false}), (req, res, next) => {
 
     console.log(req.body);
+    console.log(req.user);
 
     let lead = new Lead({
         firstName: req.body.firstName,
@@ -88,7 +109,7 @@ router.post('/add', passport.authenticate('jwt', {session: false}), (req, res, n
         passportexpirydate: req.body.passportexpirydate,
         visarejected: req.body.visarejected,
         createdBy: req.user,
-        status: 'Applicant',
+        status: "Applicant",
         assignedto: req.user, // Currently assigned to the user who creted the lead
                               // if just userid is sent from the frontend we will have to get
                               // user id and then save it.
@@ -99,13 +120,13 @@ router.post('/add', passport.authenticate('jwt', {session: false}), (req, res, n
 
     Lead.addLead(lead, (err, lead) => {
         if (err) {
-            res.status(500).json({
+            return res.status(500).json({
                 title: 'An error occurred',
                 error: err
             });
         }
         else {
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'Lead Saved',
                 obj: lead
             }); 
@@ -119,7 +140,7 @@ router.post('/add', passport.authenticate('jwt', {session: false}), (req, res, n
 
 router.get('/', passport.authenticate('jwt', {session: false}), (req, res, next) => {
     if (!req.query.email){
-        res.status(500).json({
+        return res.status(500).json({
             title: 'Invalid Request',
             error: {
                 message: "Invalid query params"
@@ -129,13 +150,13 @@ router.get('/', passport.authenticate('jwt', {session: false}), (req, res, next)
     else {
         Lead.getLeadByEmail(req.query.email, (err, lead) => {
             if (err) {
-                res.status(500).json({
+                return res.status(500).json({
                     title: 'An error occurred',
                     error: err
                 });
             }
             else {
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Lead Info',
                     obj: lead
                 });
